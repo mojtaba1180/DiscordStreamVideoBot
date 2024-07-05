@@ -1,16 +1,16 @@
 # StreamBot
 
-This is a Discord selfbot that allows streaming movies, videos, and streams from YouTube/Tiktok and direct links to a Discord voice channel.
+This is a Discord selfbot that allows streaming videos, and streams from YouTube and direct links to a Discord voice channel.
 
 ## 🧐Features
 
-- Stream movies/videos from a local folder.
+- Stream videos from a local folder.
 - Stream and search for YouTube videos using titles.
-- Stream (YouTube videos/live streams, Tiktok videos/live streams) by link.
+- Stream YouTube videos/live streams by link.
 - Stream arbitrary links (video files, live streams, etc.).
 - Playback commands: play, playlink, ytplay, pause, resume, stop.
-- List available movies.
-- Refresh the movie list.
+- List available videos.
+- Refresh the video list.
 - Get playback status.
 
 ## Requirements
@@ -19,21 +19,24 @@ This is a Discord selfbot that allows streaming movies, videos, and streams from
 
 ## 🛠️ Installation Steps:
 
-This project is [hosted on github](https://github.com/ysdragon/StreamBot). You can clone this project directly using this command:
+This project is [hosted on github](https://github.com/ysdragon/StreamBot).
+1. You can clone this project directly using this command:
 
 ```
 git clone https://github.com/ysdragon/StreamBot
 ```
 
-Use [bun](https://bun.sh) to install all the dependencies:
+2. Use [bun](https://bun.sh) to install all the dependencies:
 ```
 bun install 
 ```
 
-Build the artifacts from source:
+3. Build the artifacts from source:
 ```
 bun run build
 ```
+
+4. Rename [.env.example](https://github.com/ysdragon/StreamBot/blob/main/.env.example) to .env
 
 ## Usage
 Start the built artifacts:
@@ -41,52 +44,67 @@ Start the built artifacts:
 bun run start
 ```
 
+## Start with Docker Compose
+
+If you want to use Docker Compose, follow these steps:
+
+1. Create a new folder.
+2. Run the following command to download the `docker-compose.yml` file:
+   ```bash
+   wget https://raw.githubusercontent.com/ysdragon/StreamBot/main/docker-compose.yml
+   ```
+3. Edit the `docker-compose.yml` file and update the necessary information (e.g., TOKEN, PREFIX, GUILD_ID, etc.).
+4. Run the following command to start the Docker Compose setup:
+   ```bash
+   docker compose up -d
+   ```
+   
 ## 🛠️ Commands
 
 ```
-play <movie name> - Play a movie from the local folder.
-playlink <url> - Play a (YouTube video/live stream, TikTok video/live stream, direct link).
+play <video name> - Play a video from the local folder.
+playlink <url> - Play a (YouTube video/live stream, direct link).
 ytplay <query> - Play a YouTube video from a title query.
 ytsearch <query> - Search for a YouTube video using a title query.
 stop - Stop the current playback.
 pause - Pause the current playback.
 resume - Resume playback.
-list - List available movies.
-refresh - Refresh the movie list.
+list - List available videos.
+refresh - Refresh the video list.
 status - Get current playback status.
+preview <video name> - Generate and obtain preview thumbnails of a specific video.
 help - Show help message.
 ```
 
 ## 🛠️ Configuration
 
-Configuration is done via `config.json`:
+Configuration is done via `.env`:
 
-```json
-{
-  "token": "<user bot token>", // discord user token
-  "prefix": "$", // bot prefix 
-  "guildId": "<guild id (server id)>",
-  "commandChannel": "<command channel id>",
-  "videoChannel": "<voice channel id>",
-  "adminIds": ["<admin id>"],
-  "movieFolder": "<movies folder path>",
-  "previewCache": "/tmp/preview-cache", // here you can set the preview thumbnails cache folder
-  "streamOpts": {
-    "width": 1920, // Resolution width
-    "height": 1080, // Resolution height 
-    "fps": 30,  // Stream fps
-    "bitrateKbps": 8000, // Stream bitrate in kb
-    "maxBitrateKbps": 2500, // An option to change the max bitrate value in the payload
-    "hardware_acc": false, // Enable or disable stream hardware acceleration
-    "videoCodec": "H264" // Stream/video codec can be set to either (H264), (H265) or (VP8)
-  },
-  "server": {
-    "enabled": false, // if you want to enable the movies server
-    "username": "admin", // here you can set the username
-    "password": "admin",  // here you can set the password
-    "port": 8080 // here you can set a port to listen the movies server site
-  }
-}
+```bash
+# Selfbot options
+TOKEN = "" # Your Discord self-bot token
+PREFIX = "$" # The prefix used to trigger your self-bot commands
+GUILD_ID = "" # The ID of the Discord server your self-bot will be running on
+COMMAND_CHANNEL_ID = "" # The ID of the Discord channel where your self-bot will respond to commands
+VIDEO_CHANNEL_ID = "" # The ID of the Discord voice/video channel where your self-bot will stream videos
+ADMIN_IDS = [""] # A list of Discord user IDs that are considered administrators for your self-bot (not implemented yet)
+VIDEOS_FOLDER = "./videos" # The local path where you store video files
+PREVIEW_CACHE = "/tmp/preview-cache" # The local path where your self-bot will cache video preview thumbnails
+
+# Stream options
+STREAM_WIDTH = "1280" # The width of the video stream in pixels
+STREAM_HEIGHT = "720" # The height of the video stream in pixels
+STREAM_FPS = "30" # The frames per second (FPS) of the video stream
+STREAM_BITRATE_KBPS = "1000" # The bitrate of the video stream in kilobits per second (Kbps)
+STREAM_MAX_BITRATE_KBPS = "2500" # The maximum bitrate of the video stream in kilobits per second (Kbps)
+STREAM_HARDWARE_ACCELERATION = "false" # Whether to use hardware acceleration for video decoding, set to "true" to enable, "false" to disable
+STREAM_VIDEO_CODEC = "H264" # The video codec to use for the stream, can be "H264" or "H265" or "VP8"
+
+# Videos server options
+SERVER_ENABLED = "false" # Whether to enable the built-in video server
+SERVER_USERNAME = "admin" # The username for the video server's admin interface
+SERVER_PASSWORD = "admin" # The password for the video server's admin interface
+SERVER_PORT = "8080" # The port number the video server will listen on
 ```
 
 ## Get Token ?
@@ -94,11 +112,11 @@ Check the [Get token wiki](https://github.com/ysdragon/StreamBot/wiki/Get-Discor
 
 ## Server
 
-An optional basic HTTP server can be enabled to manage the movie library:
+An optional basic HTTP server can be enabled to manage the video library:
 
-- List movies
-- Upload movies
-- Delete movies
+- List videos
+- Upload videos
+- Delete videos
 - Generate video preview thumbnails
 
 Protected by HTTP basic auth.
@@ -106,7 +124,6 @@ Protected by HTTP basic auth.
 ## Todo
 
 - [x]  Adding ytsearch and ytplay commands   
-- [ ]  Play from torrents  
 
 # Contributing
 Public contributions are welcome!  
@@ -117,6 +134,8 @@ You can create a [new issue](https://github.com/ysdragon/StreamBot/issues/new) f
 
 This bot may violate Discord's Terms of Service. Use at your own risk.
 
+## إبراء الذمة
+أتبرأ من أي استخدام غير أخلاقي لهذا المشروع أمام الله.
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/ysdragon/StreamBot/blob/main/LICENSE) file for details.
